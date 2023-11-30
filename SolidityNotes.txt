@@ -124,18 +124,56 @@ struct Person{
 	uint256 favoriteNumber;
 	string name;
 }
-Person public nuno = Person({favoriteNumber: 12, name: "Nuno"})
-Person public laura = Person({favoriteNumber: 13, name: "Laura"})
-Person public frank = Person({favoriteNumber: 69, name: "Frank"})
+Person public nuno = Person({favoriteNumber: 12, name: "Nuno"});
+Person public laura = Person({favoriteNumber: 13, name: "Laura"});
+Person public frank = Person({favoriteNumber: 69, name: "Frank"});
 string favoriteNumberInText = "eighty-eight";
 address myAddress = 0x5BD53812ace2912278D7a9c97E23988b479FaF57;
 bytes32 favoriteBytes32 = "cat";
 function store(uint256 _favoriteNumber) public {
 	myFavoriteNumber = _favoriteNumber;
 	} // what this does is map the local variable _favoriteNumber to the state variable favoriteNumber when the store function is called.
+	
+function store(uint256 _theirFavoriteNumber, _Person Person) public {
+	theirFavoriteNumber = _theirfavoriteNumber;
+	Person = _Person;
+	} // what this does is map the local variable _theirFavoriteNumber to the state variable theirFavoriteNumber to a particular person when the store function is called.
 
 function retrieve() public view returns(uint256){
 	return myFavoriteNumber;
 	}
 }
 
+To create an array of structs: 
+declare type, visibility then variable name.
+Person[] public listOfPeople; //Defaults to empty list []
+
+So the contract would look like this:
+
+
+pragma solidity 0.8.18;
+
+contract SimpleStorage{
+
+bool hasFavoriteNumber = false;
+uint public myFavoriteNumber = 88;
+uint256 [] listOfFavoriteNumbers; // [0, 1, 2]
+struct Person{
+	uint256 favoriteNumber;
+	string name;
+}
+Person public nuno = Person({favoriteNumber: 12, name: "Nuno"});
+Person public laura = Person({favoriteNumber: 13, name: "Laura"});
+Person public frank = Person({favoriteNumber: 69, name: "Frank"});
+string favoriteNumberInText = "eighty-eight";
+address myAddress = 0x5BD53812ace2912278D7a9c97E23988b479FaF57;
+bytes32 favoriteBytes32 = "cat";
+function store(uint256 _favoriteNumber) public {
+	myFavoriteNumber = _favoriteNumber;
+	} // what this does is map the local variable _favoriteNumber to the state variable favoriteNumber when the store function is called.
+	Person[] public listOfPeople; //Defaults to empty list []
+
+function retrieve() public view returns(uint256){
+	return myFavoriteNumber;
+	}
+}
