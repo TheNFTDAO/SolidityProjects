@@ -210,3 +210,53 @@ if you pass a calldata variable, they are temporary variables that can not be mo
 Storage is permanent variables that can be modified.
 
 If you create a variable outside of a function inside of a contract, it automatically gets stored as a storage variable.
+Solidity can usually sus out what kind of storage is needed for a particular variable, for instance if a variable is being called within a function it will know that it is probably not a storage variable.
+
+--------------------------------------
+Basic Solidity Mappings:
+A mapping is like a dictionary, where a set of keys is associated with particular data and when that key is called, the data associated with it is also called.
+
+created as follows:
+
+mapping(string => uint256) public nameToFavoriteNumber;
+//The function mapping takes a string and ties it to a uint256, is publicly visible and is called nameToFavoriteNumber
+
+After this is added to the code, you will be able to search a favorite number by the string name as opposed to going through the whole index.
+
+It would make sense then, to add the mapping when the initial new person is created:
+
+pragma solidity 0.8.18;
+
+contract SimpleStorage{
+
+bool hasFavoriteNumber = false;
+uint public myFavoriteNumber = 88;
+uint256 [] listOfFavoriteNumbers; // [0, 1, 2]
+struct Person{
+	uint256 favoriteNumber;
+	string name;
+}
+Person public nuno = Person({favoriteNumber: 12, name: "Nuno"});
+Person public laura = Person({favoriteNumber: 13, name: "Laura"});
+Person public frank = Person({favoriteNumber: 69, name: "Frank"});
+Person[] public listOfPeople; //Defaults to empty list []
+string favoriteNumberInText = "eighty-eight";
+address myAddress = 0x5BD53812ace2912278D7a9c97E23988b479FaF57;
+bytes32 favoriteBytes32 = "cat";
+function store(uint256 _favoriteNumber) public {
+	myFavoriteNumber = _favoriteNumber;
+	} // what this does is map the local variable _favoriteNumber to the state variable favoriteNumber when the store function is called.
+
+mapping(string => uint256) public nameToFavoriteNumber;
+//The function mapping takes a string and ties it to a uint256, is publicly visible and is called nameToFavoriteNumber
+
+function addPerson(string memory _name, uint256 _favoriteNumber) public{
+listOfPeople.push(Person(_favoriteNumber, _name) ); // Solidity sees the nested command to create a new person entry for the array inside of the parentheses, then takes that newly created person entry and uses the push entry outside of the parentheses to actually push it into the array.
+nameToFavoriteNumber[_name] = _favoriteNumber; // What this line doing is declaring that in the mapping above, when a person is created their favorite number is mapped to their name to easily find it.
+}
+function retrieve() public view returns(uint256){
+	return myFavoriteNumber;
+	}
+}
+
+---------------------------------------------------------------
