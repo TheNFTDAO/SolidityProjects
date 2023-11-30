@@ -189,3 +189,24 @@ Below we create a function that will let us create people and update the listOfP
 function addPerson(string memory _name, uint256 _favoriteNumber) public{
 	listOfPeople.push(Person(_favoriteNumber, _name) ) // Solidity sees the nested command to create a new person entry for the array inside of the parentheses, then takes that newly created person entry and uses the push entry outside of the parentheses to actually push it into the array.
 }
+
+------------------------------------------------------------
+Memory, storage and calldata intro:
+There are 6 places where you can store and access data in solidity:
+
+Stack -
+Memory -
+Storage -
+Calldata -
+Code -
+Logs -
+
+Calldata and Memory mean the variable you are defining will only exist temporarily (for the duration of the function call). if you call addPerson(blah blah blah), the variables in the parentheses only exist until the addperson function is finished.
+
+Inside of functions, most variables default to memory variables.
+
+Difference between memory and calldata is that a memory variable can be changed and manipulated.
+if you pass a calldata variable, they are temporary variables that can not be modified.
+Storage is permanent variables that can be modified.
+
+If you create a variable outside of a function inside of a contract, it automatically gets stored as a storage variable.
