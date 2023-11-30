@@ -183,3 +183,9 @@ Now we have a view function with a "listOfPeople" title. To view the particular 
 
 if we put a range in the array "Person[3]", it is a static array that can only have that many objects
 leaving the array undefined makes it a dynamic array. "Person[]"
+
+Below we create a function that will let us create people and update the listOfPeople array. It will take 2 variables as input. The name of the person we're adding and their favorite number. We are going to use the push function to push a new entry into this array.
+
+function addPerson(string memory _name, uint256 _favoriteNumber) public{
+	listOfPeople.push(Person(_favoriteNumber, _name) ) // Solidity sees the nested command to create a new person entry for the array inside of the parentheses, then takes that newly created person entry and uses the push entry outside of the parentheses to actually push it into the array.
+}
