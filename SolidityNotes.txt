@@ -165,6 +165,7 @@ struct Person{
 Person public nuno = Person({favoriteNumber: 12, name: "Nuno"});
 Person public laura = Person({favoriteNumber: 13, name: "Laura"});
 Person public frank = Person({favoriteNumber: 69, name: "Frank"});
+Person[] public listOfPeople;
 string favoriteNumberInText = "eighty-eight";
 address myAddress = 0x5BD53812ace2912278D7a9c97E23988b479FaF57;
 bytes32 favoriteBytes32 = "cat";
@@ -177,3 +178,8 @@ function retrieve() public view returns(uint256){
 	return myFavoriteNumber;
 	}
 }
+
+Now we have a view function with a "listOfPeople" title. To view the particular person, in this example, you need to input the uint related to the index of that person to see the info related to them.
+
+if we put a range in the array "Person[3]", it is a static array that can only have that many objects
+leaving the array undefined makes it a dynamic array. "Person[]"
