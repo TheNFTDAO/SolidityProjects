@@ -357,4 +357,9 @@ contract storageFactory{
 
 }
 
-That is the same as copy pasting the simple storage contract into this new storage factory contract
+That is the same as copy pasting the simple storage contract into this new storage factory contract.
+When working with multiple files you need to keep the version of solidity in mind.
+
+We NEVER want to default to the regular import shown above.
+you can specify the contract from the target file using
+import {SimpleStorage, SimpleStorage2} from "./SimpleStorage.sol";
