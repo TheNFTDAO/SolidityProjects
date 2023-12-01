@@ -13,3 +13,6 @@ contract storageFactory{
 	}
 
 }
+
+https://youtu.be/umepbfKp5rI?t=13960 https://www.myinstants.com/en/instant/fnaf-6-am/
+----------------------------------=======================================
