@@ -318,3 +318,24 @@ contract storageFactory{
 	}
 
 }
+
+
+This isn't a best practice because it is gas intensive and confusing.
+
+when you see the format:
+
+SimpleStorage public simpleStorage;
+
+The SimpleStorage on the left is the name of the contract, and the simpleStorage on the right is the name of the variable. If this is confusing, you can rename the variable
+
+We are going to add the new keyword as a parameter in the createSimpleStorageContract to let solidity know that it is deploying a new contract when we call this function. Formatted as follows:
+
+contract storageFactory{
+
+    SimpleStorage public mySimpleStorage;
+
+	function createSimpleStorageContract() public {
+        mySimpleStorage = new SimpleStorage();
+	}
+
+}
