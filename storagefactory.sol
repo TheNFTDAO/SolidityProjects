@@ -1,14 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.18;
 
-import "./simpleStorage.sol";
+import "./SimpleStorage.sol";
 
 contract storageFactory{
 
-    SimpleStorage public mySimpleStorage;
+    SimpleStorage[] public listOfSimpleStorage; //This signifies that there will be an Array of SimpleStorage contracts deployed.
 
 	function createSimpleStorageContract() public {
-        mySimpleStorage = new SimpleStorage();
+        mySimpleStorage newSimpleStorageContract = new SimpleStorage();
+		listOfSimpleStorageContrcts.push(newSimpleStorageContract);
 	}
 
 }
