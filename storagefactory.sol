@@ -1,19 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.18;
+pragma solidity ^0.8.18;
 
-import "./SimpleStorage.sol";
+import "./simpleStorage.sol";
 
 contract storageFactory{
 
-    SimpleStorage[] public listOfSimpleStorage; //This signifies that there will be an Array of SimpleStorage contracts deployed.
+    simpleStorage[] public listOfSimpleStorageContracts; //This signifies that there will be an Array of SimpleStorage contracts deployed.
 
 	function createSimpleStorageContract() public {
-        mySimpleStorage newSimpleStorageContract = new SimpleStorage();
-		listOfSimpleStorageContrcts.push(newSimpleStorageContract);
+        simpleStorage newSimpleStorageContract = new simpleStorage();
+		listOfSimpleStorageContracts.push(newSimpleStorageContract);
 	}
 
 }
-
-https://youtu.be/umepbfKp5rI?t=13960 https://www.myinstants.com/en/instant/fnaf-6-am/
-----------------------------------=======================================
-test

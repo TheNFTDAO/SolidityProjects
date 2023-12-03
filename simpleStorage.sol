@@ -1,6 +1,6 @@
-pragma solidity 0.8.18;
+pragma solidity ^0.8.18;
 
-contract SimpleStorage{
+contract simpleStorage{
 
 bool hasFavoriteNumber = false;
 uint public myFavoriteNumber = 88;
