@@ -389,4 +389,44 @@ https://youtu.be/umepbfKp5rI?t=13960 https://www.myinstants.com/en/instant/fnaf-
 
 Day 3:
 
+What adding the listOfSimpleStorageContracts lets us do is track the array of simple storage contracts deployed by their index number.
+
+we can think of the storage factory as a manager for the contracts within. Next we'll call other functions from the simple storage contract the storage factory contract deploys from within the storage factory contract.
+
+we'll add the following function:
+
+function sfStore(uint256 _simpleStorageIndex, uint256 _newSimpleStorageNumber) public {
+	// Address
+	// ABI
+	// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.18;
+
+import "./simpleStorage.sol";
+
+contract storageFactory{
+
+    simpleStorage[] public listOfSimpleStorageContracts; //This signifies that there will be an Array of SimpleStorage contracts deployed.
+
+	function createSimpleStorageContract() public {
+        simpleStorage newSimpleStorageContract = new simpleStorage();
+		listOfSimpleStorageContracts.push(newSimpleStorageContract);
+	}
+	function sfStore(uint256 _simpleStorageIndex, uint256 _newSimpleStorageNumber) public {
+	// Address
+	// ABI
+	simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex]; //what this line says is in the simpleStorage contract, let the mySimpleStorage function get the array of simple storage contracts generated in the listOfSimpleStorageContracts. the array _simpleStorageIndex is being wrapped in the SimpleStorage contract. Now we can call the store function directly from this contract with the following:
+	mySimpleStorage.store(_NewSimpleStorageNumber);
+	}
+	//now we need a function that will let us get(read) data from the new variable mySimpleStorage that we just created. we can get it with the following function. 
+	function sfGet(uint256 _simpleStorageIndex) public view returns(uint256){
+	SimpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex);
+	return mySimpleStorage.retrieve();
+}
+
+}
+
+To interact with a contract from within another smart contract you'll need 2 things, a contract address and the ABI for that function. (technically you only need the function selector and not the ABI but we'll touch on that later)
+ABI = Application Binary Interface
+
+The compiler knows what the ABI is automatically because the compiler generates the ABI.
 
