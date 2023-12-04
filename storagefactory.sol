@@ -1,6 +1,6 @@
 pragma solidity ^0.8.18;
 
-import "./simpleStorage.sol";
+import "./SimpleStorage.sol";
 
 contract storageFactory {
     simpleStorage[] public listOfSimpleStorageContracts;
@@ -30,7 +30,7 @@ contract storageFactory {
         mySimpleStorage.storeID(_id);
     }
 
-	function sfGetID(uint256 _storeID) public {
+	function sfGetID(uint256 _storeID) public returns (uint256) {
 		simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_storeID];
 		return mySimpleStorage.retrieveuint256();
 	}

@@ -515,3 +515,23 @@ First I'll add
 
 CONTINUE DEBUGGING TOMORROW!
 https://youtu.be/umepbfKp5rI?t=14266
+-----------------------------------------------------------------------------------------------
+Day 5
+
+Tried compiling the code and got the following error on storageFactory.sol:
+
+from solidity:
+TypeError: Wrong argument count for function call: 0 arguments given but expected 1.
+  --> StorageFactory.sol:35:10:
+   |
+35 | 		return mySimpleStorage.retrieveuint256();
+   | 		       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+from solidity:
+TypeError: Different number of arguments in return statement than in returns declaration.
+  --> StorageFactory.sol:35:3:
+   |
+35 | 		return mySimpleStorage.retrieveuint256();
+   | 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   
+I had to make sure to define the retrieveuint256() function in the SimpleStorage.sol contract first, 

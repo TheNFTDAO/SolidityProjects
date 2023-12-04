@@ -36,6 +36,9 @@ nameToFavoriteNumber[_name] = _favoriteNumber; // What this line doing is declar
     function retrieveString() public view returns (string memory) {
         return myStoredString;
     }
+	function retrieveuint256() public returns (uint256 memory) {
+	return storeID;
+}
 
 function retrieve() public view returns(uint256){
 	return myFavoriteNumber;
