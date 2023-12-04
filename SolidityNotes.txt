@@ -398,10 +398,11 @@ we'll add the following function:
 function sfStore(uint256 _simpleStorageIndex, uint256 _newSimpleStorageNumber) public {
 	// Address
 	// ABI
-	// SPDX-License-Identifier: MIT
+
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import "./simpleStorage.sol";
+import "./simpleStorage.sol"; //This line imports the simpleStorage contract from a file named simpleStorage.sol. This indicates that storageFactory will use functionalities defined in the simpleStorage contract.
 
 contract storageFactory{
 
@@ -430,3 +431,11 @@ ABI = Application Binary Interface
 
 The compiler knows what the ABI is automatically because the compiler generates the ABI.
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+Day 4
+
+Using the AI to describe and analyze the storageFactory contract above.
+A new contract named "storageFactory" is defined. Then a public array of "simpleStorage" contracts is declared. The array stores instances of the "simpleStorage" contracts that this smart contract creates.
+The function "createSimpleStorageContract" creates a new instance of "simpleStorage" and adds it to the "listOfSimpleStorageContracts" array.
+then, "sfStore" retrieves a specific "simpleStorage" contract instance from the array using the "_simpleStorageIndex", then calls the "store" function of the "simpleStorage" contract to store "_newSimpleStorageNumber".
+then "sfGet" retrieves a specific "simpleStorage" instance, then calls the "retrieve" function of the "simpleStorage" contract and returns the result (the contract address from the array of contract addresses.
