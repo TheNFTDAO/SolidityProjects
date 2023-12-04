@@ -512,3 +512,6 @@ First I'll add
         simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
         mySimpleStorage.storeID(_id);
     }
+
+CONTINUE DEBUGGING TOMORROW!
+https://youtu.be/umepbfKp5rI?t=14266
