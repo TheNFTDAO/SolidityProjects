@@ -15,6 +15,7 @@ Person public frank = Person({favoriteNumber: 69, name: "Frank"});
 Person[] public listOfPeople; //Defaults to empty list []
 string favoriteNumberInText = "eighty-eight";
 string public myStoredString;
+uint256 public storeID;
 address myAddress = 0x5BD53812ace2912278D7a9c97E23988b479FaF57;
 bytes32 favoriteBytes32 = "cat";
 function storeString(string memory _storeString) public{
@@ -31,7 +32,13 @@ function addPerson(string memory _name, uint256 _favoriteNumber) public{
 listOfPeople.push(Person(_favoriteNumber, _name) ); // Solidity sees the nested command to create a new person entry for the array inside of the parentheses, then takes that newly created person entry and uses the push entry outside of the parentheses to actually push it into the array.
 nameToFavoriteNumber[_name] = _favoriteNumber; // What this line doing is declaring that in the mapping above, when a person is created their favorite number is mapped to their name to easily find it.
 }
+    // New function to retrieve the stored string
+    function retrieveString() public view returns (string memory) {
+        return myStoredString;
+    }
+
 function retrieve() public view returns(uint256){
 	return myFavoriteNumber;
 	}
+
 }
