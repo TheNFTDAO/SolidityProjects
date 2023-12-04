@@ -439,3 +439,67 @@ A new contract named "storageFactory" is defined. Then a public array of "simple
 The function "createSimpleStorageContract" creates a new instance of "simpleStorage" and adds it to the "listOfSimpleStorageContracts" array.
 then, "sfStore" retrieves a specific "simpleStorage" contract instance from the array using the "_simpleStorageIndex", then calls the "store" function of the "simpleStorage" contract to store "_newSimpleStorageNumber".
 then "sfGet" retrieves a specific "simpleStorage" instance, then calls the "retrieve" function of the "simpleStorage" contract and returns the result (the contract address from the array of contract addresses.
+
+I intend to use the AI to add 2 functions to the contract and explain to me how and why the new functions work. I want a string associated with each newly deployed simpleStorage contract from the storage factory that is it's name, and I want to add a uint256 variable associated with each contract that is it's "ID"
+I asked the ai to add the first request to the code and it provided the following:
+
+pragma solidity ^0.8.18;
+
+import "./simpleStorage.sol";
+
+contract storageFactory {
+    simpleStorage[] public listOfSimpleStorageContracts;
+
+    function createSimpleStorageContract() public {
+        simpleStorage newSimpleStorageContract = new simpleStorage();
+        listOfSimpleStorageContracts.push(newSimpleStorageContract);
+    }
+
+    function sfStore(uint256 _simpleStorageIndex, uint256 _newSimpleStorageNumber) public {
+        simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
+        mySimpleStorage.store(_newSimpleStorageNumber);
+    }
+
+    function sfStoreString(uint256 _simpleStorageIndex, string memory _newString) public {
+        simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
+        mySimpleStorage.storeString(_newString);
+    }
+
+    function sfGet(uint256 _simpleStorageIndex) public view returns(uint256) {
+        simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
+        return mySimpleStorage.retrieve();
+    }
+
+    function sfGetString(uint256 _simpleStorageIndex) public view returns(string memory) {
+        simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
+        return mySimpleStorage.retrieveString();
+    }
+}
+
+
+Then when I tried compiling it gave the error:
+
+from solidity:
+TypeError: Member "storeString" not found or not visible after argument-dependent lookup in contract simpleStorage.
+  --> storageFactory.sol:20:9:
+   |
+20 |         mySimpleStorage.storeString(_newString);
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+this is because the storeString function is NOT in the simpleStorage contract. Adding that in now:
+Adding this:
+function storeString(string _storeString){
+	storeString = _storeString;
+	}
+
+to simpleStorage.
+
+I forgot to declare the myStoredString variable earlier in the contract with:
+string public myStoredString;
+
+Adding that in. Also needed to add in a function that retrieves that myStoredString value:
+
+    // New function to retrieve the stored string
+    function retrieveString() public view returns (string memory) {
+        return myStoredString;
+    }

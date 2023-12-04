@@ -14,8 +14,12 @@ Person public laura = Person({favoriteNumber: 13, name: "Laura"});
 Person public frank = Person({favoriteNumber: 69, name: "Frank"});
 Person[] public listOfPeople; //Defaults to empty list []
 string favoriteNumberInText = "eighty-eight";
+string public myStoredString;
 address myAddress = 0x5BD53812ace2912278D7a9c97E23988b479FaF57;
 bytes32 favoriteBytes32 = "cat";
+function storeString(string memory _storeString) public{
+	myStoredString = _storeString;
+	}
 function store(uint256 _favoriteNumber) public {
 	myFavoriteNumber = _favoriteNumber;
 	} // what this does is map the local variable _favoriteNumber to the state variable favoriteNumber when the store function is called.
