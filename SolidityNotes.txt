@@ -503,3 +503,12 @@ Adding that in. Also needed to add in a function that retrieves that myStoredStr
     function retrieveString() public view returns (string memory) {
         return myStoredString;
     }
+
+Next I am adding in a way to declare a uint256 value mapped to ID, add an ID to a simpleStorage deployed contract, then retrieve the value associated with it.
+
+First I'll add
+
+     function sfStoreID(uint256 _simpleStorageIndex, uint256 _id) public {
+        simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
+        mySimpleStorage.storeID(_id);
+    }
