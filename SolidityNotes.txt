@@ -534,4 +534,71 @@ TypeError: Different number of arguments in return statement than in returns dec
 35 | 		return mySimpleStorage.retrieveuint256();
    | 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    
-I had to make sure to define the retrieveuint256() function in the SimpleStorage.sol contract first, 
+I had to make sure to define the retrieveuint256() function in the SimpleStorage.sol contract first.
+
+----------------------------------------------------------
+Day 6
+
+Defined the above, need to debug the following issue in StorageFactory.sol:
+
+from solidity:
+TypeError: Wrong argument count for function call: 1 arguments given but expected 0.
+  --> StorageFactory.sol:30:9:
+   |
+30 |         mySimpleStorage.storeID(_id);
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   
+The above tells me there should not be an argument in storeID, but when I compile without an argument I find:
+from solidity:
+Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
+  --> StorageFactory.sol:28:50:
+   |
+28 | 	function sfStoreID(uint256 _simpleStorageIndex, uint256 _id) public {
+   | 	                                                ^^^^^^^^^^^
+
+from solidity:
+Warning: Function state mutability can be restricted to view
+  --> StorageFactory.sol:28:2:
+   |
+28 | 	function sfStoreID(uint256 _simpleStorageIndex, uint256 _id) public {
+   | 	^ (Relevant source part starts here and spans across multiple lines).
+   
+   Set to view, but how will the _id value be called without that there? Compiling to test.
+
+I see sfStore, sfStoreString for the name, sfGet and sfGetString, I see sfGetID but the sfStoreID function is a view function and doesn't let me record a uint value there. removing view on sfStoreID. I see unused function parameter on _simpleStorageIndex in the sfGetID parameters, but I don't get that error in sfGet where )simpleStorageIndex is also defined. I forgot to add _simpleStorageIndex to the sfStoreID function too. Now I'm getting unused functions on both sfStoreID and sfGetID. Compiling to test. createSimpleStorageContract runs properly and I get an address for array 0. sfStore works and I can sfGet the number for array entry 0. _storeID worked when writing, but I noticed on the view function it asks for a _storeID variable which shouldn't be something I write in, I should just be entering the index number and it should return the _storeID. When I removed _storeID from the sfGetID variable as such:
+
+function sfGetID(uint256 _simpleStorageIndex) public view returns (uint256)
+
+I get the following error now:
+rom solidity:
+DeclarationError: Undeclared identifier.
+  --> StorageFactory.sol:34:64:
+   |
+34 | 		simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_storeID];
+   | 		                                                             ^^^^^^^^
+  
+Undeclared identifier, I have to go back to the simpleStorage contract and declare the identifier. Added it into simpleStorage.sol as follows: uint256 public _storeID;
+storageFactory still says undeclared identifier.
+
+I asked the AI for help, it says that I declared _storeID as an array in the simpleStorage contract but it's a single value in storageFactory, and that the types are incompatible. An array cannot be directly assigned to a single value variable. It suggested that if I want to store a unique ID for each simple storage contract, to modify the SimpleStorage contract to set a single uint256 for the storeID and provide a function to update it:
+
+    // Function to set storeID
+    function setStoreID(uint256 _id) public {
+        storeID = _id;
+    }
+
+then in storageFactory use the setStoreID function to set the ID:
+
+function sfStoreID(uint256 _simpleStorageIndex, uint256 _storeID) public {
+    simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
+    mySimpleStorage.setStoreID(_storeID);
+}
+
+This is fine and dandy but it didn't fix the undeclared identifier error. It said _storeID is being used as an identifier in the storageFactory contract, but it hasn't been declared in the scope of the function where it's being used. oh I was having it look for the _storeID instead of searching by the _simpleStorageIndex! It was supposed to search for the index and display the ID, and I wrote it in a way where the _storeID was not in the scope of the listOfSimpleStorageContracts. Updated code looks like:
+
+	function sfGetID(uint256 _simpleStorageIndex) public view returns (uint256) {
+		simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
+		return mySimpleStorage.retrieveuint256();
+	}
+	
+Now all 3, string, ID and favorite number store and view properly!! Next I want to combine viewing all 3 and updating all 3 into one call, then I'll add notes on the interactions of the contract and why it works.

@@ -18,6 +18,10 @@ string public myStoredString;
 uint256 public storeID;
 address myAddress = 0x5BD53812ace2912278D7a9c97E23988b479FaF57;
 bytes32 favoriteBytes32 = "cat";
+    // Function to set storeID
+    function setStoreID(uint256 _id) public {
+        storeID = _id;
+    }
 function storeString(string memory _storeString) public{
 	myStoredString = _storeString;
 	}
@@ -36,7 +40,7 @@ nameToFavoriteNumber[_name] = _favoriteNumber; // What this line doing is declar
     function retrieveString() public view returns (string memory) {
         return myStoredString;
     }
-	function retrieveuint256() public returns (uint256 memory) {
+	function retrieveuint256() public view returns (uint256) {
 	return storeID;
 }
 

@@ -1,10 +1,9 @@
 pragma solidity ^0.8.18;
 
 import "./SimpleStorage.sol";
-
 contract storageFactory {
     simpleStorage[] public listOfSimpleStorageContracts;
-
+    
     function createSimpleStorageContract() public {
         simpleStorage newSimpleStorageContract = new simpleStorage();
         listOfSimpleStorageContracts.push(newSimpleStorageContract);
@@ -25,13 +24,13 @@ contract storageFactory {
         return mySimpleStorage.retrieve();
     }
 	   
-	function sfStoreID(uint256 _simpleStorageIndex, uint256 _id) public {
-        simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
-        mySimpleStorage.storeID(_id);
-    }
+	function sfStoreID(uint256 _simpleStorageIndex, uint256 _storeID) public {
+    simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
+    mySimpleStorage.setStoreID(_storeID);
+}
 
-	function sfGetID(uint256 _storeID) public returns (uint256) {
-		simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_storeID];
+	function sfGetID(uint256 _simpleStorageIndex) public view returns (uint256) {
+		simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
 		return mySimpleStorage.retrieveuint256();
 	}
 
