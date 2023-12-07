@@ -623,3 +623,43 @@ AddFiveStorage can inherit all the functionality of the SimpleStorage contract.
 
 Begin by doing a named import of the SimpleStorage function from the simple storage contract:
 import {simpleStorage} from "./SimpleStorage.sol";
+You'll also want to add in:
+contract AddFiveStorage is simpleStorage {
+
+This makes AddFive Storage inherit all of the functionality from the simpleStorage function from SimpleStorage.sol
+When you compile AddFiveStorage as is, after deploying you'll see that all of the functionality from SimpleStorage is available (all functions callable)
+Once all the functions are inherited from SimpleStorage, we can start adding onto those functions in the new contract:
+
+function sayHello() public returns(string memory){
+	returns "Hello";
+	}
+}
+
+The objective is this lesson is to modify the store function to execute then add 5 to people's stored favorite numbers.
+To add this plus 5 to the store function, we will use something called "overrides"
+
+There are 2 keywords that you need to be aware of when using overrides:
+Virtual - 
+and
+Overrides - 
+You won't be able to modify inherited functions without an override.
+You need to add the virtual keyword in the original simple storage contract to allow that contract to be overriden by another contract
+
+function store(uint256 _favoriteNumber) public virtual {
+
+Next let's add the actual intended function of adding 5 to myFavoriteNumber in the AddFiveStorage.sol contract:
+
+function store(uint256 _newNumber) public override {
+  myFavoriteNumber = _newNumber + 5;
+ }
+}
+------------------------------------
+Summary:
+Here we learned about the new keyword that lets us deploy contracts from other contracts.
+We learned we can use the import function which is fundamentally like copy pasting code from the other contract into our intended contract.
+We learned about named imports that pull specific functions in contracts to save on gas.
+We can interact with other contracts so long as we have their address and the target ABI
+structs you create (types) automatically come with addresses and ABIs, so you can access both of them by calling that particular type.
+to inherit functions from another contract, in the child contract you import or named import a particular contract, then use the contract contractName is parentContract{ syntax.
+The parent contract must have the virtual argument to allow itself to be overridden by a child contract.
+The child contract needs to declare the override keyword and the base class (parent class) needs to declare the virtual keyword.

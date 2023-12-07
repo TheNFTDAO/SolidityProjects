@@ -25,7 +25,7 @@ bytes32 favoriteBytes32 = "cat";
 function storeString(string memory _storeString) public{
 	myStoredString = _storeString;
 	}
-function store(uint256 _favoriteNumber) public {
+function store(uint256 _favoriteNumber) public virtual {
 	myFavoriteNumber = _favoriteNumber;
 	} // what this does is map the local variable _favoriteNumber to the state variable favoriteNumber when the store function is called.
 
