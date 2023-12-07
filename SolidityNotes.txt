@@ -602,3 +602,24 @@ This is fine and dandy but it didn't fix the undeclared identifier error. It sai
 	}
 	
 Now all 3, string, ID and favorite number store and view properly!! Next I want to combine viewing all 3 and updating all 3 into one call, then I'll add notes on the interactions of the contract and why it works.
+
+------------------------------------------------------------------------------------------------------------------
+Day 7
+Going to continue the class and come back to combining the other functions.
+
+contract.function(_variable);
+
+We can make the sfGet function above more condensed:
+since the listOfSimpleStorageContracts returns an object of type SimpleStorage, we can delete the "SimpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];" line and copy listOfSimpleStorageContracts[_simpleStorageIndex] into the next line so it reads:
+return listOfSimpleStorageContracts[_simpleStorageIndex].retrieve();
+
+the .retrieve says we're gonna call the retrieve function on whatever precedes it (in this case listOfSimpleStorageContracts[_simpleStorageIndex]
+Research why this works^
+-----------------------------=====================
+Inheritance
+Let's say we want to use a new contract that adds 5 to whatever someone's favorite number was from the previous function. We could just copy over all the code from the previous contract into the new AddFiveStorage.sol contract, but that would not be gas efficient.
+We can have the AddFiveStorage contract become a child contract of the SimpleStorage contract.
+AddFiveStorage can inherit all the functionality of the SimpleStorage contract.
+
+Begin by doing a named import of the SimpleStorage function from the simple storage contract:
+import {simpleStorage} from "./SimpleStorage.sol";

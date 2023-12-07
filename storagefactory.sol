@@ -20,8 +20,7 @@ contract storageFactory {
     }
 
     function sfGet(uint256 _simpleStorageIndex) public view returns(uint256) {
-        simpleStorage mySimpleStorage = listOfSimpleStorageContracts[_simpleStorageIndex];
-        return mySimpleStorage.retrieve();
+        return listOfSimpleStorageContracts[_simpleStorageIndex].retrieve();
     }
 	   
 	function sfStoreID(uint256 _simpleStorageIndex, uint256 _storeID) public {
