@@ -28,3 +28,17 @@ require(msg.value > 1e18, didn't send enough eth);
 This means that at a minimum, for this message to interact with the contract it must send a value of 1 ethereum. And the requires plus the comma indicate if the first portion reverts, do whatever the second portion says.
 
 1e18= 1 eth = 1*10^18 wei
+
+-------------------------------
+Reverts:
+
+Undo any actions that have been done previously, and sends the remaining gas back to user.
+
+Let's add some logic in to see how reverts work:
+
+let's add in uint256 public myValue = 1; //declared at the beginning of the contract
+
+and
+myValue = myValue + 2;//within the contract.
+
+What this does is add 2 to the myValue variable every time this contract is successfully funded.
