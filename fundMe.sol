@@ -6,7 +6,7 @@ contract fundMe {
 function fund() public payable{
 //allow users to send money
 //require a minimum dollar amount
-
+require(msg.value > 1e18, didn't send enough eth);
 }
 
 function withdraw() public {

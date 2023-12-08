@@ -7,4 +7,24 @@ this allows the contract in question to be sent the native gas token of the chai
 We'll also indicate a minimum USD amount in the contract.
 
 When writing a contract or app lay out an outline of what each contract is supposed to do.
-Study the global keywords!!!!!!!!!!!!
+Study the global keywordsand functions!!!!!!!!!!!!!
+
+Whenever we transact on the blockchain, there is always a value field and usually it is sent with 0 as the value. 
+
+When we send ethereum to another wallet, we are actually putting the amount we're sending in the value field in a transaction
+
+To make it so a user can send value to a contract, we need to add the payable keyword as such:
+
+function fund() public payable {}
+
+Contracts can hold funds just like a wallet address can.
+
+We are going to use the msg.value global function to include a number of wei sent with the message.
+
+along with including the function that allows eth to be sent to the contract, let's include code that requires a minimum amount of eth to be sent to the contract with the require as such. We will also include code that gives a message if the transaction is reverted:
+
+require(msg.value > 1e18, didn't send enough eth);
+
+This means that at a minimum, for this message to interact with the contract it must send a value of 1 ethereum. And the requires plus the comma indicate if the first portion reverts, do whatever the second portion says.
+
+1e18= 1 eth = 1*10^18 wei
