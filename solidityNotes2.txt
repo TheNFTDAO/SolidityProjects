@@ -1,0 +1,8 @@
+Lesson 4:
+Remix FundMe
+We're going to create a crowdfunding type program called FundMe where users can pay in cryptocurrency to fund a cause.
+This contract will allow the owner of the contract to withdraw the funds.
+A new item we'll see in this lesson is a payable function (indicated by a red button in remix)
+this allows the contract in question to be sent the native gas token of the chain you're working with is.
+We'll also indicate a minimum USD amount in the contract.
+
