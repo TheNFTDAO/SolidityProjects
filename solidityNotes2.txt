@@ -6,3 +6,5 @@ A new item we'll see in this lesson is a payable function (indicated by a red bu
 this allows the contract in question to be sent the native gas token of the chain you're working with is.
 We'll also indicate a minimum USD amount in the contract.
 
+When writing a contract or app lay out an outline of what each contract is supposed to do.
+Study the global keywords!!!!!!!!!!!!
