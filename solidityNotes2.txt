@@ -84,3 +84,42 @@ function getVersion() public view returns (uint256){
 }
 
 https://youtu.be/umepbfKp5rI?t=16733
+
+-------------------------===============================--
+
+Previously we imported a contract into another contract, but both contracts lived locally in remix. Let's replace the cumbersome interface code we copy pasted into the fundMe contract with something that works a little leaner.
+
+importing external contracts:
+we are using NAMED imports, because we only want to pull over exactly what we're using to save on gas!
+
+import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol"
+
+Now that we've imported the particular code we need, let's create a function to pull chainlink price feed data into a smart contract:
+
+function getPrice() public {
+//Address - 
+//ABI - 
+AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306)}
+(, int price,,,) = priceFeed.latestRoundData() //the price variable represents the price of eth in usd. We can omit the variables we don't need, but must keep the commas from them. In doing this, we are only assigning return value to the price variable, and the other variables are not assigned.
+}
+
+The chainlink price data feed returns the value of eth with 8 decimal places, but the msg.value command denominates eth in 18 decimal places. To resolve this conflict, we need to add 10 decimal places to the price value returned by chainlink:
+
+return price * 1e10 // (price times 1 with 10 zeros.)
+
+Price is an int256 but msg.value is a uint256. We will need to convert it via typecasting.
+
+To make the price uint256, we'd adjust as follows:
+
+return uint256(price * 1e10);
+---------------------------------------------------------------
+Now we have to convert the msg.value amount into dollars with the getConversionRate function:
+
+function getConversionRate(uint256 ethAmount) public view return(uint256)// the function getConversionRate will take a uint256 ethAmount as input, and it's results will be returned publicly as a uint256 (result being $ price of eth) 
+{
+ uint256 ethPrice = getPrice();
+ uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18; // To find the ethAmountInUsd we need to take the price of a whole eth from the chainlink data feed, multiply it by the amount of eth the user sent to the smart contract, and divide it by 1*10^18 because the value returned will have 18 decimal places and we want to eliminate those for a clean answer.
+ return ethAmountInUsd;
+ }
+ 
+ https://youtu.be/umepbfKp5rI
