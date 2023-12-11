@@ -42,3 +42,34 @@ and
 myValue = myValue + 2;//within the contract.
 
 What this does is add 2 to the myValue variable every time this contract is successfully funded.
+
+STUDY all the transaction fields!
+-----------------==========================
+Integrating chainlink price feeds:
+Let's say in the contract we want users to spend a minimum of 5$ instead of 1 whole ethereum.
+first we'll declare the minimumUsd value at the beginning of the contract:
+
+uint8 minimumUsd = 5;
+
+Then we change the require msg value to our new variable:
+
+require(msg.value >= minimumUsd, "didn't send enough eth")
+
+now, msg.value is in terms of eth but minimum USD is in terms of dollars.
+To get the value of eth in dollars, we'll need to use a chainlink price data feed:
+
+the next step will be to convert the amount of ethereum into it's value in dollars.
+
+first we'll create a function to get the ethereum usd price, then get the conversion rate to compare it to the payable function above to see if the minimum 5 dollar threshold was met
+Just as any other contract call, when we call the contract that coordinates the chainlink eth/usd price data feed we will need to find 2 datapoints:
+
+function getPrice public(){
+	// Eth USD price contract Address: 0x694AA1769357215DE4FAC081bf1f309aDC325306
+	
+	// ABI: When we import/call a contract, the ABI is imported but that brings in a lot of extra unnecessary code. Instead we can call the latestround function in particular to grab the price data.
+}
+function getConversionRate public(){
+
+}
+
+https://youtu.be/umepbfKp5rI?t=16733
