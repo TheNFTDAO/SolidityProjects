@@ -72,4 +72,15 @@ function getConversionRate public(){
 
 }
 
+There will be instances where code acts as just an interface, without any logic included within it as shown by the aggregatorv3interface that lives at https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/interfaces/FeedRegistryInterface.sol
+Think of the interface as being the remote control that has the commands, and the contract it points to (in this case the eth/usd data feed contract on sepolia) being the TV that processes and has all the components to execute the command from the remote.
+
+If you compile the interface, it will give you the ABIs you need to interact with an address.
+
+Next let's add a function that calls the getVersion function from the aggregator interface:
+
+function getVersion() public view returns (uint256){
+	AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306).version();
+}
+
 https://youtu.be/umepbfKp5rI?t=16733
