@@ -122,4 +122,44 @@ function getConversionRate(uint256 ethAmount) public view return(uint256)// the 
  return ethAmountInUsd;
  }
  
- https://youtu.be/umepbfKp5rI
+-------------=====================================
+An important rule in solidity math is you always want to multiply before you divide, because only whole numbers work in solidity. The AI can help here.
+
+Now that we've pulled in the real world price of eth/usd into the contract, we need to run logic that makes sure the amount being funded is greater than 5$.
+
+To do this we'll use:
+
+require(getConversionRate(msg.value) >= minimumUsd, "Up your money son.");
+
+getConversionRate takes an ethAmount as input, uses the price data feed to find the value of a whole eth, then converts it to ethAmountInUsd, then checks to see if the dollar value is greater than minimumUsd. Since the value returned from getConversionRate has 18 decimal places, and we're looking for the dollar value, we need to change the math logic for minimumUsd as follows:
+
+uint256 public minimumUsd = 5e18;//that means 5 to the 18th exponent, adding 18 decimal places to the minimum usd as well so it can be used in the contract. same as we used 1e18 earlier to add 18 decimal places to eth to find the gwei value.
+-------------=========================================
+Next, let's keep track of the users who sent us money in this contract:
+
+Let's make an array of addresses called "funders" and keep track of who sends us money.
+
+address[] public funders;
+
+then we want to make a mapping of addresses to make it easier to figure out how much money each sender has sent:
+
+mapping(address => uint256) public addressToAmountFunded; // associate the address of the message sender from addressToAmountFunded to a number that lets us identify which number sender it was.
+
+then to add onto existing msg.value eth sent by each sender, we'll need to add the following:
+
+addressToAmountFunded[msg.sender] = addressToAmountFunded[msg.sender] + msg.value; // This means we're taking the address of the message sender, looking for the array entry for that particular message sender and adding the msg.value they are funding to their existing array entry.
+
+----------------------------------------
+RECAP
+Whenever we interact with a contract we need the contract and ABI
+
+Compiling an interface lets us get the ABI we need easily, and gives us ways to interact with a contract without including all the contract logic (saves gas)
+
+when we combine the contract address with the interface we can easily call the functions in that contract.
+
+When working with math in solidity, decimals don't work.
+
+you need to make sure you're using the correct number of units. gwei has 18 decimal places.
+
+msg.sender and msg.value are known as globally available units. STUDY ALL THE GLOBALLY AVAILABLE UNITS.
+
