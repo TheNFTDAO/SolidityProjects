@@ -6,7 +6,7 @@ import {priceConverter} from "./priceConverter.sol";
 contract fundMe {
 using priceConverter for uint256;
 uint256 public myValue = 1;
-uint256 public minimumUsd = 5e18;
+uint256 public constant MINIMUM_USD = 5e18;
 address public owner;
 address[] public funders;
 constructor() {
@@ -18,7 +18,7 @@ function fund() public payable{
 //require a minimum dollar amount
 msg.value.getConversionRate();
 myValue = myValue + 2;
-require(msg.value.getConversionRate() >= minimumUsd, "Up your money son.");
+require(msg.value.getConversionRate() >= MINIMUM_USD, "Up your money son.");
 funders.push(msg.sender); // when the above executes, push the value associated with the funders variable (which would be the address that sends the funded eth, the msg.sender) into the funders array
 //addressToAmountFunded[msg.sender] = addressToAmountFunded[msg.sender] + msg.value;
 //instead of having a function like above be variable[value] = variable[value] + otherVariable, we can replace that with:

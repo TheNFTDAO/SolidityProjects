@@ -333,6 +333,63 @@ For this, we will use a constructor!
 Constructor is a keyword and a special function in solidity.
 
 Constructor() {
+owner = msg.sender;
 }
 
-Since we want the withdraw function to only be called by the owner of this contract, 
+Since we want the withdraw function to only be called by the owner of this contract, we will first declare a global variable of owner:
+
+address public owner;
+
+Then we pass this variable along to our constructor function:
+
+constructor() {
+owner = msg.sender;
+}
+
+we  COULD add into the withdraw function:
+SINGLE EQUAL SIGN IS "SET TO", DOUBLE EQUAL SIGN MEANS EQUALS.
+require(msg.sender == owner, "Must be owner")
+
+but we don't want to have to set require to owner for every function.
+
+That's where MODIFIERS come in.
+
+modifiers allow us to create a keyword we can put in the function declaration to add functionality to any function easily if the keyword is included.
+
+We create it as such:
+
+modifier onlyOwner() {
+require(msg.sender == owner, "Sender is not owner");
+ _;
+}
+
+the _; means "add whatever else you were going to do in the modified function."
+
+then we can put the onlyOwner keyword after the visibility in the function declaration withdraw as such:
+
+function withdraw() public onlyOwner {
+
+This means it will execute whatever is in the modifier BEFORE any of the logic within the curly brackets of that particular function are executed.
+
+------------------------------------======================
+Advanced solidity immutable and constants:
+
+let's modify the contract to be a little more professional:
+
+if we have variables that only need to be set one time per contract, like minimum usd and constructor, we have tools that can make declaring them more gas efficient. there are 2 keywords in solidity that make it so particular variables can't be changed:
+
+constant:
+immutable:
+
+We can adjust one of the declarations like minimumUsd as follows:
+
+uint256 public constant minimumUsd = 5e18;
+
+We add the constant and immutable keywords before the name of the variable. And in doing so, the variable doesn't have to take a storage spot in the contract so it becomes more gas efficient.
+
+typically constant variables have a different naming convention, you'll want them in all caps with _ between words:
+
+
+uint256 public constant MINIMUM_USD = 5e18;
+
+constant variables are cheaper to view and to deploy.
