@@ -163,3 +163,125 @@ you need to make sure you're using the correct number of units. gwei has 18 deci
 
 msg.sender and msg.value are known as globally available units. STUDY ALL THE GLOBALLY AVAILABLE UNITS.
 
+---------------------------------=========================================
+Lesson 4: Library
+the getprice and getconversion code are cluttering our contract, so we want a way to import that functionality. A way we can do that is creating something called a library.
+
+Look up Solidity by Example!!
+
+Libraries are similar to contracts, but you can't declare state variables and you can't send them ether. A library is embedded into the contract if all library functions are internal. Otherwise, the library must be deployed and then linked before the contract is deployed.
+
+using libraries can add functionality to different values.
+
+We can make the getConversionRate function be a function of any value of type uint256. That means we can create our own custom function with any type, such as
+msg.value.getConversionRate(); // We can work with getConversionRate as if msg.value is a class or object or contract that we created?
+
+We'll start by making a new contract called priceConverter.sol which is going to be a library.
+
+What is a library? It's similar to a contract. We don't use the .sol extension for libraries.
+
+First we'll start by grabbing getPrice, getConversionRate and getVersion from fundme.sol and putting it into the priceConverter library
+We'll also need to import the aggregatorv3interfacefrom the CL github.
+
+Next we'll change the visibility of the functions within the priceConverter library since only our contract needs to use them and they do not need to be publicly called once they're in our contract. We only want functions within the fundMe contract to call the priceConverter library functions, we don't want people to be able to arbitrarily call those priceConverter functions in our contract.
+
+Next we will import our priceConverter library into our fundMe contract and attach it to a variable (uint256)
+You can delete the import AggregatorV3Interface line from fundMe since it will be imported to our library instead.
+
+Add in: import {PriceConverter} from "./PriceConverter.sol"
+
+to attach the price converter contract to the uint256 variables within our contract (to make it so we can use the priceConverter library functions on the uint256 variables within our contract), we add the following logic at the beginning of our contract:
+
+using priceConverter for uint256;
+
+At this point, the contract doesn't know what get conversionRate is. Make a note of why.
+
+Next, in the fund function let's add:
+msg.value.getConversionRate();
+
+Whenever you're working with a library, the first input variable for a library is going to be the type you're using with the library. since we attached uint256 to this library, the first input is going to be a uint256
+Since msg.value is a uint256, it gets passed inside getConversionRate as the first variable. So in the example:
+
+function getConversionRate(uint256 ethAmount) internal view returns(uint256)}
+//msg.value.getConversionRate();
+the msg.value is going to be passed into the uint256 ethAmount.
+
+even though the parentheses in getConversionRate are empty.
+
+We have getPrice and getConversionRate as uint256 variables, as such they are also passed the msg.value value but since they are only viewing data and not making any actionable calls, it doesn't matter. But there may be circumstances where you want to make sure the variable type being called won't have any problems being passed the library attached to that variable! Look into this more!
+
+in the fundMe contract, instead of using:
+require(getConversionRate(msg.value) >= minimumUsd, "Up your money son.");
+and msg.value.getConversionRate();
+separately, we can combine the two to save gas:
+
+delete the msg.value.getConversionRate(); line and replace getConversionRate(msg.value) with
+require(msg.value.getConversionRate()
+
+This works because we are attaching the priceConverter library to all uint256 variables within the contract, so now all uint256s have access to the getConversionRate in the priceConverter library, and since msg.value is a uint256 it can call getConversionRate and it'll pass itself (msg.value) as the first input parameter of that particular function (into the uint256 ethAmount in getConversionRate)
+
+if we put a SECOND parameter into the getConversionRate function as follows:
+
+function getConversionRate(uint256 ethAmount, uint256 secondParameter)...
+
+then whatever is put into the parentheses of our NEW function (msg.value.getConversionRate(exampleSecondValuePassedThrough))
+
+With this, we have moved a majority of the math into our own library!!
+
+-----------------=================================================
+
+SafeMath:
+one of the most commonly used libraries in solidity was SafeMath
+safemath was all over the place before version 0.8 of solidity, now it's almost completely unused.
+prior to 0.8, unsigned and signed integers were unchecked. If you passed the upper limit of an integer, it would loop back to the lowest value (for example, a uint8 of 255 adding 1 to it's value would loop back to 0.)
+
+in versions after 0.8, the contract just fails if you overflow or underflow on a variable.
+you can use the unchecked keyword if you want it to loop back to 0.
+
+the unchecked keyword makes your gas a little bit more efficient. if you're certain your function will never overflow or underflow you can use the unchecked keyword to make your gas more efficient.
+
+-------------------------========================================
+
+For Loop
+next, let's implement our withdraw function in the fundMe contract:
+
+When we withdraw all the money, we'll likely want to reset all the mappings back down to zero to show that the values associated to how much each user has withdrawn has reset.
+
+to accomplish this we're going to use a for loop, which is logic that loops through a list of something or do something a repeated amount of times.
+
+We want to get all the elements of the funders array of addresses, elements being 1,2,3,4 from the INDEXES 0,1,2,3
+To do comments INSIDE of a line of solidity, you use /*comment*/
+we'll accomplish this with the for keyword:
+
+for (/* starting index, ending index, step amount */)
+so for example, let's say we want it to start on the 0th index, go up to the 10th index, and go up in increments of 1. We'd use:
+
+for (type variableName = 0, 10, 1)
+
+so for this example, we want it to start with the funderIndex 0, we want it to go through the full length of the funders array which can vary, and we want it to go in increments of fundersIndexes + 1.
+
+So, it would look as follows:
+
+for(uint256 funderIndex = 0; funderIndex < funders.length; funderIndex = funderIndex + 1;)
+
+or for a SHORTCUT to variable = variable + 1, you can use
+
+for(uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++;){
+//inside the curly braces, we are saying "execute everything inside these curly braces for the duration specified in the for loop.
+//the final part of the for loop (the increments), means that every time we execute the logic within the curly brackets, we are going to add 1 to the funderIndex and make the next increment whatever the logic in the increment section of the for loop is, in this case whatever the current funderIndex is plus 1, until it reaches the full length of the funders array.
+//to access the 0th element of the funders array, we use the following logic:
+ funders[fundersIndex]; //this will return an address, since it's an array of addresses
+}
+
+We are adding in address funder = funders[funderIndex]; to reset our mapping addressToAmountFunded with the next command. we use this line to associate elements in the array back to the addresses associated with those indexes, and in the next line once the logic to find the address from a particular funder is found, we use the following logic to reset that addresses deposits to 0.
+addressToAmountFunded[funder] = 0;
+
+ask the ai the difference between funder and funders:
+
+funders is the array type address[] declared in the contract
+funder is a local variable within the withdraw function used in the context of the for loop. so funder only exists for us to temporarily map a particular element from the funders array to the address variable we need to reset the addressToAmountFunded variable back to 0 since we're withdrawing the funds associated with their address out.
+
+//addressToAmountFunded[msg.sender] = addressToAmountFunded[msg.sender] + msg.value;
+//instead of having a function like above be variable[value] = variable[value] + otherVariable, we can replace that with:
+addressToAmountFunded[msg.sender] += msg.value;
+//this means we are going to set addressToAmountFunded[msg.sender] to itself plus msg.value
