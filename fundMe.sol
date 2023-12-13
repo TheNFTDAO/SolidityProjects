@@ -7,10 +7,10 @@ contract fundMe {
 using priceConverter for uint256;
 uint256 public myValue = 1;
 uint256 public constant MINIMUM_USD = 5e18;
-address public owner;
+address public immutable i_owner;
 address[] public funders;
 constructor() {
-owner = msg.sender;
+i_owner = msg.sender;
 }
 mapping(address => uint256) public addressToAmountFunded; // associate the address of the message sender from addressToAmountFunded to a number that lets us identify which number sender it was.
 function fund() public payable{
@@ -42,5 +42,8 @@ funders = new address[](0);
 (bool callSuccess, ) = payable(msg.sender).call{value: address(this).balance}("");
 require(callSuccess, "Call failed");
  }
-
+modifier onlyOwner{
+require(msg.sender == i_owner, "Sender is not owner");
+_;
+}
 }

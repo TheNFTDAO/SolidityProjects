@@ -393,3 +393,20 @@ typically constant variables have a different naming convention, you'll want the
 uint256 public constant MINIMUM_USD = 5e18;
 
 constant variables are cheaper to view and to deploy.
+
+Owner is another variable we only set one time. Variables that we set one time but outside of the same line where they're declared (like the constructor) we can set as immutable.
+a good convention for marking immutable variables is as follows:
+
+address public immutable i_owner;
+
+constructor(){
+owner = msg.sender;
+}
+
+In the global scope of the contract we can't declare a msg.sender, so we have to declare it as part of the deployment. there's only going to be a msg.sender when we're inside of a function, like the constructor function. the global variables are declared outside of (before) any of the logic of the functions happen.
+
+let's go through and replace all the instances of owner with i_owner.
+
+immutable variables have similar gas savings to constant variables.
+--------------------------------==========================
+Advanced Solidity Custom Errors:
