@@ -8,6 +8,7 @@ using priceConverter for uint256;
 uint256 public myValue = 1;
 uint256 public constant MINIMUM_USD = 5e18;
 address public immutable i_owner;
+error NotTheOwner();
 address[] public funders;
 constructor() {
 i_owner = msg.sender;
@@ -18,7 +19,9 @@ function fund() public payable{
 //require a minimum dollar amount
 msg.value.getConversionRate();
 myValue = myValue + 2;
-require(msg.value.getConversionRate() >= MINIMUM_USD, "Up your money son.");
+//require(msg.value.getConversionRate() >= MINIMUM_USD, "Up your money son.");
+if (msg.value.getConversionRate() < (MINIMUM_USD)
+	revert NotTheOwner();
 funders.push(msg.sender); // when the above executes, push the value associated with the funders variable (which would be the address that sends the funded eth, the msg.sender) into the funders array
 //addressToAmountFunded[msg.sender] = addressToAmountFunded[msg.sender] + msg.value;
 //instead of having a function like above be variable[value] = variable[value] + otherVariable, we can replace that with:
@@ -40,10 +43,12 @@ for(uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++){
 funders = new address[](0);
 //this means the funders variable will be deployed to a new contract with a new array called address with a starting index of 0;
 (bool callSuccess, ) = payable(msg.sender).call{value: address(this).balance}("");
-require(callSuccess, "Call failed");
+if(callSuccess != true)
+	revert NotTheOwner();
  }
 modifier onlyOwner{
-require(msg.sender == i_owner, "Sender is not owner");
+if (msg.sender != i_owner)
+revert NotTheOwner);
 _;
 }
 }

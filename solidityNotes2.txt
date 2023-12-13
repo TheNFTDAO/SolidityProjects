@@ -410,3 +410,63 @@ let's go through and replace all the instances of owner with i_owner.
 immutable variables have similar gas savings to constant variables.
 --------------------------------==========================
 Advanced Solidity Custom Errors:
+as of solidity 0.8.4, there is a more gas efficient way than storing a string as a variable that is the else of a transaction failure. these are expensive and difficult to use dynamic information with. custom errors can be defined using the error statement for your reverts:
+
+pragma solidity ^0.8.4;
+
+error Unauthorized();
+
+contract blahblah{
+address payable owner = payable(msg.sender)
+
+function withdraw() public {
+if (msg.sender != owner)
+	revert Unauthorized();
+	
+owner.transfer(address(this).balance);
+}
+}
+This means if the owner is not the one who tries to withdraw the eth from the contract, the unauthorized defined custom error is displayed.
+
+You declare the errors with the global variables. Instead of require you use if, then add the revert statement.
+
+-------------------===========================================
+Advanced solidity receive and fallback
+Sometimes people will try to interact with a contract without going through the required function calls as needed.
+
+if someone send the fundMe contract eth directly without calling the fund function, it would not make any of the logic of the fund function execute. The array of funders wouldn't be updated and the amountfunded wouldn't be mapped to that address.
+
+there is a way to make it so if people send money directly to that contract or people try to trigger functions that do not exist to trigger code.
+
+receive()
+fallback()
+
+if a call with no data or a plain send of ethereum to the contract is executed, then the receive() logic executes:
+
+each contract can have one receive function without the explicit declaration of a function.
+
+receive() external payable {
+result = 1;
+}
+
+that result variable will start out as 0, but if any empty calls or simple eth sends are sent to the contract, it calls the receive function and updates the result to 1.
+
+whenever data is sent with a transaction that is not explicitly associated with a function that matches with that calldata, solidity looks for a fallback function.
+
+fallback() external payable {
+result = 2;
+}
+
+For the fundMe contract, we can add fallback and receive functions in case someone accidentally sends the contract money:
+
+receive() external payable {
+fund();
+}
+
+fallback() external payable {
+fund();
+}
+
+go over immutable and constant more with the AI.
+
+https://youtu.be/umepbfKp5rI?t=21592
