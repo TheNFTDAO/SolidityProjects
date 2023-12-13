@@ -285,3 +285,54 @@ funder is a local variable within the withdraw function used in the context of t
 //instead of having a function like above be variable[value] = variable[value] + otherVariable, we can replace that with:
 addressToAmountFunded[msg.sender] += msg.value;
 //this means we are going to set addressToAmountFunded[msg.sender] to itself plus msg.value
+
+---------------------=====================
+Resetting an Array:
+
+We still need to accomplish 2 things after these changes are made.
+
+We need to reset the array and withdraw the funds.
+
+we could go through a loop that resets each element in the funders array but that would be too gas intensive, so we are going to create an entirely new funders array instead.
+
+to reset the array, we will do
+funders = new address[](0);
+//this means the funders variable will be deployed to a new contract with a new array called address with a starting index of 0;
+
+To withdraw funds from the contract:
+There are 3 different ways to send ether (native tokens on a chain):
+Transfer: if we want to transfer the funds to whoever is calling the withdraw function we'd set:
+msg.sender.transfer(address(this).balance); 
+//the this keyword references the whole contract from wherein the msg.sender.transfer function is being called, basically this says "in the msg.sender.transfer function, the address of which is from this same contract in which it's being called, take the balance and send it to the payable address msg.sender (whoever sent the command). msg.sender = address, payable(msg.sender) = payable address. The transfer function is capped at 2300 gas, and if more gas is used it throws an error.
+
+Send: bool sendSuccess = payable(msg.sender).send(address(this).balance);
+require(sendSuccess, "Send failed");
+The above command says: "search for a boolean value of true in the sendSuccess variable, and that variable is returned from the function from the payable(msg.sender) called send sends the balance of the native gas token from the address derived from this particular contract from which this command is being called. It is required that the bool value for sendSuccess is successful, else give the "Send failed" message on failure. Transfer automatically makes the transaction fail, but send requires us to include additional logic if the transaction fails, since it only returns a boolean success or failure value on failure. Also capped at 2300 gas, and if that fails because it cost more than that to send, it returns a boolean value saying whether or not the transfer was successful. 
+Call:
+payable(msg.sender).call{value: address(this).balance}("")
+//one of the first lower level commands we use in our solidity code. the call function is incredibly powerful and we can use it to call virtually any function in all of ethereum without having to have the ABI. First we'll learn to use it to send the native blockchain currency. we will put any function information into the parentheses that we want to call in another contract. We use it like a transaction of it's own. The call function above actually returns 2 variables, a boolean variable called callSuccess, and a bytes variable called dataReturned. We are going to exhibit that by adjusting the contract as follows:
+(bool callSuccess, bytes memory dataReturned) = payable(msg.sender).call{value: address(this).balance}("")
+	since call allows us to call different functions, if that function returns any values or data, we're going to save that in the dataReturned variable. since bytes objects are arrays, dataReturned needs to be stored in the memory.
+	we know that this function returns 2 variables, but for the sake of the withdraw function in our fundme contract, we do not care about the bytes dataReturned since no complex data is being returned, we just want to know if we successfully withdrew the funds from the contract, so we will adjust that line as such:
+(bool callSuccess, ) = payable(msg.sender).call{value: address(this).balance}("")
+	Because as we know, if there is a variable returned that we don't need for a particular function, we can leave an empty placeholder signified by a comma. similar to the send function, we will add logic in in case the function that is called fails to execute:
+payable(msg.sender).call{value: address(this).balance}("");
+require(callSuccess, "Call failed");
+	
+Use call as often as possible.
+
+Let's add the call function into the fundme contract's withdraw function at this point:
+payable(msg.sender).call{value: address(this).balance}("");
+require(callSuccess, "Call failed");
+
+but as it stands at this point after adding that code in, the contract is built such as anyone can withdraw the eth from the contract and we don't want that. we only want the owner of the contract to be able to withdraw.
+We want to set up the contract to where whenever we deploy this contract, an owner is assigned to it and only they can call critical functions within it.
+
+For this, we will use a constructor!
+
+Constructor is a keyword and a special function in solidity.
+
+Constructor() {
+}
+
+Since we want the withdraw function to only be called by the owner of this contract, 
