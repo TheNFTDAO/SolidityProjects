@@ -470,3 +470,20 @@ fund();
 go over immutable and constant more with the AI.
 
 https://youtu.be/umepbfKp5rI?t=21592
+
+----------------------==========================
+
+Foundry Simple Storage:
+
+We are about to move off of remix ;(
+
+often just getting a local environment set up can be the most difficult step in this process. Make sure you use stack exchange, and all the resources like AI available to you.
+
+Foundry is a smart contract development framework like brownie, foundry is completely solidity based.
+
+First install foundry on windows. you'll need to install the WSL first. https://learn.microsoft.com/en-us/windows/wsl/install
+
+Then install with the instructions at: https://book.getfoundry.sh/
+
+We will be using a code editor called Visual Studio Code:https://code.visualstudio.com/
+
