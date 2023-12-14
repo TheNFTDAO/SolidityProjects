@@ -487,3 +487,8 @@ Then install with the instructions at: https://book.getfoundry.sh/
 
 We will be using a code editor called Visual Studio Code:https://code.visualstudio.com/
 
+-----------------------------------------
+
+Moving to new repo after this vid:
+
+https://youtu.be/umepbfKp5rI?t=25245
